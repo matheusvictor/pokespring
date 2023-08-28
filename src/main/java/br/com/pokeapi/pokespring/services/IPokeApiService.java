@@ -1,10 +1,10 @@
 package br.com.pokeapi.pokespring.services;
 
-import br.com.pokeapi.pokespring.models.Pokemon;
+import br.com.pokeapi.pokespring.dto.PokemonDTO;
 
 
 public interface IPokeApiService {
 
-    Pokemon getById(String id);
+    PokemonDTO getById(String id);
 
 }
