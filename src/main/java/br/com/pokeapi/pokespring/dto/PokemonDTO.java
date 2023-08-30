@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import lombok.Data;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,12 +15,13 @@ import java.util.List;
 public class PokemonDTO {
 
     @JsonProperty("id")
-    private int id;
+    private Integer id = null;
 
     @JsonProperty("name")
     private String name;
 
-    private List<TypeDTO> types;
+    private List<TypeDTO> types = new ArrayList<>();
+
     @JsonProperty(value = "types")
     public List<String> getTypeNames() {
         List<String> typeNames = new ArrayList<>();
@@ -30,7 +32,7 @@ public class PokemonDTO {
         return typeNames;
     }
 
-    private List<AbilityDTO> abilities;
+    private List<AbilityDTO> abilities = new ArrayList<>();
 
     @JsonProperty(value = "abilities")
     public List<String> getAbilityNames() {

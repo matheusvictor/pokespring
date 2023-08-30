@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +13,6 @@ import java.util.Map;
 public class PokemonIdsAndNamesDTO {
 
     @JsonProperty("results")
-    List<Map<String, String>> results;
+    List<Map<String, String>> results = new ArrayList<>();
 
 }

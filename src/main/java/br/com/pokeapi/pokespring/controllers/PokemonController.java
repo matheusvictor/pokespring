@@ -22,12 +22,12 @@ public class PokemonController {
             @RequestParam(name = "limit", defaultValue = "10", required = false) String limit,
             @RequestParam(name = "offset", defaultValue = "0", required = false) String offset
     ) {
-        return ResponseEntity.ok(this.pokeApiService.getPokemonIdsAndNames(limit, offset));
+        return this.pokeApiService.getPokemonIdsAndNames(limit, offset);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PokemonDTO> getById(@PathVariable(name = "id") String id) {
-        return ResponseEntity.ok(this.pokeApiService.getById(id));
+    @GetMapping("/{value}")
+    public ResponseEntity<PokemonDTO> getById(@PathVariable(name = "value") String value) {
+        return this.pokeApiService.getByIdOrName(value);
     }
 
 }
