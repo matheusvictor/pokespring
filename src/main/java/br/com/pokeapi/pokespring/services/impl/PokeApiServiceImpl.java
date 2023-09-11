@@ -1,8 +1,9 @@
-package br.com.pokeapi.pokespring.services;
+package br.com.pokeapi.pokespring.services.impl;
 
 import br.com.pokeapi.pokespring.config.PokeApiConfigProperties;
 import br.com.pokeapi.pokespring.dto.PokemonDTO;
 import br.com.pokeapi.pokespring.dto.PokemonIdsAndNamesDTO;
+import br.com.pokeapi.pokespring.services.IPokeApiService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

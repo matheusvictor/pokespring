@@ -1,11 +1,12 @@
-package br.com.pokeapi.pokespring.services;
+package br.com.pokeapi.pokespring.services.impl;
 
 import br.com.pokeapi.pokespring.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-public class AuthServiceImpl implements IAuthService {
+public class AuthServiceImpl implements UserDetailsService {
 
     @Autowired
     private UserRepository userRepository;
