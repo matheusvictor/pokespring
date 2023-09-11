@@ -26,7 +26,7 @@ public class PokemonController {
     }
 
     @GetMapping("/{value}")
-    public ResponseEntity<PokemonDTO> getById(@PathVariable(name = "value") String value) {
+    public ResponseEntity<PokemonDTO> getByIdOrName(@PathVariable(name = "value") String value) {
         return this.pokeApiService.getByIdOrName(value);
     }
 
