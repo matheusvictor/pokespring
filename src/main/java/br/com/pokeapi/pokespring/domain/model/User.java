@@ -26,7 +26,7 @@ public class User {
     private String password;
 
     public User(UserData data) {
-        this.username = data.name();
+        this.username = data.username();
         this.password = data.password();
     }
 
