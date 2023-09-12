@@ -50,9 +50,6 @@ public class PokeApiServiceImpl implements IPokeApiService {
 
             allPokemonNamesList = response.getBody();
 
-//            if (allPokemonNamesList != null) {
-//                return allPokemonNamesList.getResults();
-//            }
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             allPokemonNamesList.setResults(new ArrayList<>());
             throw new RuntimeException("Houve um erro ao tentar realizar a requisição!");
