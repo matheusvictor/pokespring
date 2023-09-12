@@ -5,10 +5,13 @@ import br.com.pokeapi.pokespring.dto.PokemonDTO;
 import br.com.pokeapi.pokespring.dto.PokemonIdsAndNamesDTO;
 import br.com.pokeapi.pokespring.services.IPokeApiService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -26,28 +29,35 @@ public class PokeApiServiceImpl implements IPokeApiService {
     private final RestTemplate restTemplate = new RestTemplate();
 
     @Override
-    public ResponseEntity<List<Map<String, String>>> getPokemonIdsAndNames(String limit, String offset) {
+    public List<Map<String, String>> getPokemonIdsAndNames(String limit, String offset) {
 
-        String urlWithQueryParams = UriComponentsBuilder.fromHttpUrl(pokeApiConfig.getBaseUrl())
-                .queryParam("limit", limit)
-                .queryParam("offset", offset)
-                .build()
-                .toString();
-
-        PokemonIdsAndNamesDTO allPokemonNamesList =
-                this.restTemplate.getForObject(urlWithQueryParams, PokemonIdsAndNamesDTO.class);
+        PokemonIdsAndNamesDTO allPokemonNamesList = new PokemonIdsAndNamesDTO();
 
         try {
-            return new ResponseEntity<>(
-                    this.getIdAndNames(allPokemonNamesList),
-                    HttpStatus.OK
+            String urlWithQueryParams = UriComponentsBuilder
+                    .fromHttpUrl(pokeApiConfig.getBaseUrl())
+                    .queryParam("limit", limit)
+                    .queryParam("offset", offset)
+                    .build()
+                    .toString();
+
+            ResponseEntity<PokemonIdsAndNamesDTO> response = this.restTemplate.exchange(
+                    urlWithQueryParams,
+                    HttpMethod.GET,
+                    new HttpEntity<>(new HttpHeaders()),
+                    PokemonIdsAndNamesDTO.class
             );
-        } catch (HttpClientErrorException e) {
-            return new ResponseEntity<>(
-                    this.getIdAndNames(allPokemonNamesList),
-                    e.getStatusCode()
-            );
+
+            allPokemonNamesList = response.getBody();
+
+//            if (allPokemonNamesList != null) {
+//                return allPokemonNamesList.getResults();
+//            }
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            allPokemonNamesList.setResults(new ArrayList<>());
+            throw new RuntimeException("Houve um erro ao tentar realizar a requisição!");
         }
+        return allPokemonNamesList.getResults();
     }
 
     private List<Map<String, String>> getIdAndNames(PokemonIdsAndNamesDTO allPokemonNamesList) {
@@ -73,22 +83,31 @@ public class PokeApiServiceImpl implements IPokeApiService {
     }
 
     @Override
-    public ResponseEntity<PokemonDTO> getByIdOrName(String value) {
-        String urlWithPathParam = UriComponentsBuilder.fromHttpUrl(pokeApiConfig.getBaseUrl())
-                .path(String.format("/%s", value))
-                .build()
-                .toString();
+    public PokemonDTO getByIdOrName(String value) {
+
+        PokemonDTO pokemonDTO = new PokemonDTO();
 
         try {
-            return new ResponseEntity<>(
-                    restTemplate.getForObject(urlWithPathParam, PokemonDTO.class),
-                    HttpStatus.OK
+            String urlWithPathParam = UriComponentsBuilder
+                    .fromHttpUrl(pokeApiConfig.getBaseUrl())
+                    .path(String.format("/%s", value))
+                    .build()
+                    .toString();
+
+            ResponseEntity<PokemonDTO> response = this.restTemplate.exchange(
+                    urlWithPathParam,
+                    HttpMethod.GET,
+                    new HttpEntity<>(new HttpHeaders()),
+                    PokemonDTO.class
             );
-        } catch (HttpClientErrorException e) {
-            return new ResponseEntity<>(
-                    new PokemonDTO(), e.getStatusCode()
-            );
+
+            pokemonDTO = response.getBody();
+
+        } catch (HttpClientErrorException | HttpServerErrorException e) {
+            throw new RuntimeException("Houve um erro ao tentar realizar a requisição!");
         }
+
+        return pokemonDTO;
     }
 
 }
