@@ -31,7 +31,7 @@ public class PokeApiServiceImpl implements IPokeApiService {
     @Override
     public List<Map<String, String>> getPokemonIdsAndNames(String limit, String offset) {
 
-        PokemonIdsAndNamesDTO allPokemonNamesList = new PokemonIdsAndNamesDTO();
+        PokemonIdsAndNamesDTO allPokemonNamesList;
 
         try {
             String urlWithQueryParams = UriComponentsBuilder
@@ -51,10 +51,9 @@ public class PokeApiServiceImpl implements IPokeApiService {
             allPokemonNamesList = response.getBody();
 
         } catch (HttpClientErrorException | HttpServerErrorException e) {
-            allPokemonNamesList.setResults(new ArrayList<>());
             throw new RuntimeException("Houve um erro ao tentar realizar a requisição!");
         }
-        return allPokemonNamesList.getResults();
+        return this.getIdAndNames(allPokemonNamesList);
     }
 
     private List<Map<String, String>> getIdAndNames(PokemonIdsAndNamesDTO allPokemonNamesList) {
@@ -82,7 +81,7 @@ public class PokeApiServiceImpl implements IPokeApiService {
     @Override
     public PokemonDTO getByIdOrName(String value) {
 
-        PokemonDTO pokemonDTO = new PokemonDTO();
+        PokemonDTO pokemonDTO;
 
         try {
             String urlWithPathParam = UriComponentsBuilder
